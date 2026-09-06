@@ -6,14 +6,16 @@ from django.shortcuts import get_object_or_404, render, redirect
 from .models import Recado
 
 
+def home(request):
+    ultimos = Recado.objects.all()[:5]
+    return render(request, "recados/home.html", {"ultimos": ultimos})
+
+
 def mural(request):
-    # Pesquisa via GET: o termo vem na URL como ?busca=algo
     busca = request.GET.get("busca", "").strip()
 
     recados = Recado.objects.all()
     if busca:
-        # Filtra pelo conteudo da mensagem OU pelo nome de quem publicou.
-        # __icontains = contem, ignorando maiusculas/minusculas.
         from django.db.models import Q
         recados = recados.filter(
             Q(mensagem__icontains=busca) | Q(autor__username__icontains=busca)
@@ -24,8 +26,6 @@ def mural(request):
 
 
 def detalhes_recado(request, id):
-    # URL dinamica /recados/<id>/ — busca o recado pelo ID no banco (ORM).
-    # Se o ID nao existir, get_object_or_404 responde 404 (sem erro interno).
     recado = get_object_or_404(Recado, id=id)
     return render(request, "recados/detalhes_recado.html", {"recado": recado})
 

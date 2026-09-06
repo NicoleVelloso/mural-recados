@@ -1,15 +1,11 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Novo Recado</title>
-    <link rel="stylesheet" href="{% static 'recados/estilo.css' %}">
-</head>
-<body>
+{% extends "recados/base.html" %}
+
+{% block titulo %}Novo Recado{% endblock %}
+
+{% block conteudo %}
     <h1>Novo Recado</h1>
 
-    <a class="botao" href="{% url 'mural' %}">Voltar ao mural</a>
+    <a class="botao" href="{% url 'meus_recados' %}">Voltar aos meus recados</a>
 
     {% if erro %}
         <p class="erro">{{ erro }}</p>
@@ -17,11 +13,8 @@
 
     <form method="post">
         {% csrf_token %}
-
         <label for="mensagem">Mensagem:</label>
         <textarea id="mensagem" name="mensagem" required>{{ mensagem|default:'' }}</textarea>
-
         <button type="submit">Publicar recado</button>
     </form>
-</body>
-</html>
+{% endblock %}

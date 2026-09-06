@@ -61,7 +61,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "mural_recados.wsgi.application"
 
-# Banco: usa PostgreSQL se DATABASE_URL existir, senão cai no SQLite local
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if DATABASE_URL:

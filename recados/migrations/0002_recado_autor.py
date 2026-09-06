@@ -11,8 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # Remove os recados antigos (que nao tinham autor) e o campo 'nome'.
-        # Depois adiciona o vinculo obrigatorio com o usuario que publicou.
         migrations.RunSQL(
             sql="DELETE FROM recados_recado;",
             reverse_sql=migrations.RunSQL.noop,

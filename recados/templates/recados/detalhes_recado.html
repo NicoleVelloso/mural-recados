@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Recado</title>
+    <link rel="stylesheet" href="{% static 'recados/estilo.css' %}">
+</head>
+<body>
+    <h1>Detalhes do Recado</h1>
+
+    <a class="botao" href="{% url 'mural' %}">Voltar ao mural</a>
+
+    <div class="recado">
+        <p class="nome">Publicado por: {{ recado.autor.username }}</p>
+        <p>{{ recado.mensagem }}</p>
+        <p class="data">{{ recado.criado_em }}</p>
+    </div>
+</body>
+</html>

@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path("", views.mural, name="mural"),
+    path("recados/<int:id>/", views.detalhes_recado, name="detalhes_recado"),
     path("meus/", views.meus_recados, name="meus_recados"),
     path("novo/", views.novo_recado, name="novo_recado"),
     path("editar/<int:id>/", views.editar_recado, name="editar_recado"),

@@ -26,16 +26,33 @@
         <p class="aviso">Faça login para publicar um recado.</p>
     {% endif %}
 
+    <form method="get" class="busca">
+        <input type="text" name="busca" placeholder="Pesquisar recados..." value="{{ busca }}">
+        <button type="submit">Pesquisar</button>
+        {% if busca %}
+            <a class="link" href="{% url 'mural' %}">Limpar</a>
+        {% endif %}
+    </form>
+
+    {% if busca %}
+        <p class="info-busca">Resultados para: "{{ busca }}"</p>
+    {% endif %}
+
     {% if recados %}
         {% for recado in recados %}
             <div class="recado">
                 <p class="nome">{{ recado.autor.username }}</p>
-                <p>{{ recado.mensagem }}</p>
+                <p>{{ recado.mensagem|truncatechars:120 }}</p>
                 <p class="data">{{ recado.criado_em }}</p>
+                <a class="link-detalhes" href="{% url 'detalhes_recado' recado.id %}">Ver detalhes</a>
             </div>
         {% endfor %}
     {% else %}
-        <p class="vazio">Ainda não há recados. Seja o primeiro a escrever um!</p>
+        {% if busca %}
+            <p class="vazio">Nenhum recado encontrado para "{{ busca }}".</p>
+        {% else %}
+            <p class="vazio">Ainda não há recados. Seja o primeiro a escrever um!</p>
+        {% endif %}
     {% endif %}
 </body>
 </html>

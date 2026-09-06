@@ -7,8 +7,27 @@ from .models import Recado
 
 
 def mural(request):
+    # Pesquisa via GET: o termo vem na URL como ?busca=algo
+    busca = request.GET.get("busca", "").strip()
+
     recados = Recado.objects.all()
-    return render(request, "recados/mural.html", {"recados": recados})
+    if busca:
+        # Filtra pelo conteudo da mensagem OU pelo nome de quem publicou.
+        # __icontains = contem, ignorando maiusculas/minusculas.
+        from django.db.models import Q
+        recados = recados.filter(
+            Q(mensagem__icontains=busca) | Q(autor__username__icontains=busca)
+        )
+
+    contexto = {"recados": recados, "busca": busca}
+    return render(request, "recados/mural.html", contexto)
+
+
+def detalhes_recado(request, id):
+    # URL dinamica /recados/<id>/ — busca o recado pelo ID no banco (ORM).
+    # Se o ID nao existir, get_object_or_404 responde 404 (sem erro interno).
+    recado = get_object_or_404(Recado, id=id)
+    return render(request, "recados/detalhes_recado.html", {"recado": recado})
 
 
 @login_required
@@ -37,8 +56,6 @@ def novo_recado(request):
 
 @login_required
 def editar_recado(request, id):
-    # Só encontra o recado se ele existir E pertencer ao usuário logado.
-    # Se for de outra pessoa, retorna 404 antes de qualquer alteração.
     recado = get_object_or_404(Recado, id=id, autor=request.user)
 
     if request.method == "POST":
@@ -61,7 +78,6 @@ def editar_recado(request, id):
 
 @login_required
 def excluir_recado(request, id):
-    # Mesma proteção: só o dono chega no recado.
     recado = get_object_or_404(Recado, id=id, autor=request.user)
 
     if request.method == "POST":

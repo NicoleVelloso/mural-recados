@@ -102,4 +102,8 @@ STORAGES = {
     },
 }
 
+LOGIN_URL = "entrar"
+LOGIN_REDIRECT_URL = "mural"
+LOGOUT_REDIRECT_URL = "mural"
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

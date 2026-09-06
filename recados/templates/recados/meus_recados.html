@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meus Recados</title>
+    <link rel="stylesheet" href="{% static 'recados/estilo.css' %}">
+</head>
+<body>
+    <div class="topo">
+        <span class="ola">Olá, {{ user.username }}</span>
+        <a class="link" href="{% url 'mural' %}">Mural</a>
+        <a class="link" href="{% url 'sair' %}">Sair</a>
+    </div>
+
+    <h1>Meus Recados</h1>
+
+    <a class="botao" href="{% url 'novo_recado' %}">Escrever novo recado</a>
+
+    {% if recados %}
+        {% for recado in recados %}
+            <div class="recado">
+                <p>{{ recado.mensagem }}</p>
+                <p class="data">{{ recado.criado_em }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="vazio">Você ainda não publicou nenhum recado.</p>
+    {% endif %}
+</body>
+</html>

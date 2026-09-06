@@ -3,25 +3,24 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Novo Recado</title>
+    <title>Entrar</title>
     <link rel="stylesheet" href="{% static 'recados/estilo.css' %}">
 </head>
 <body>
-    <h1>Novo Recado</h1>
+    <h1>Entrar</h1>
 
     <a class="botao" href="{% url 'mural' %}">Voltar ao mural</a>
 
-    {% if erro %}
-        <p class="erro">{{ erro }}</p>
+    {% if form.errors %}
+        <p class="erro">Usuário ou senha inválidos. Tente novamente.</p>
     {% endif %}
 
     <form method="post">
         {% csrf_token %}
-
-        <label for="mensagem">Mensagem:</label>
-        <textarea id="mensagem" name="mensagem" required>{{ mensagem|default:'' }}</textarea>
-
-        <button type="submit">Publicar recado</button>
+        {{ form.as_p }}
+        <button type="submit">Entrar</button>
     </form>
+
+    <p class="rodape">Não tem conta? <a href="{% url 'cadastro' %}">Cadastre-se</a></p>
 </body>
 </html>

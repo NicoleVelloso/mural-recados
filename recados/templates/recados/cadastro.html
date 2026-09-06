@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="{% static 'recados/estilo.css' %}">
+</head>
+<body>
+    <h1>Criar conta</h1>
+
+    <a class="botao" href="{% url 'mural' %}">Voltar ao mural</a>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <p class="rodape">Já tem conta? <a href="{% url 'entrar' %}">Entrar</a></p>
+</body>
+</html>

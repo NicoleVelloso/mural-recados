@@ -7,14 +7,29 @@
     <link rel="stylesheet" href="{% static 'recados/estilo.css' %}">
 </head>
 <body>
+    <div class="topo">
+        {% if user.is_authenticated %}
+            <span class="ola">Olá, {{ user.username }}</span>
+            <a class="link" href="{% url 'meus_recados' %}">Meus recados</a>
+            <a class="link" href="{% url 'sair' %}">Sair</a>
+        {% else %}
+            <a class="link" href="{% url 'entrar' %}">Entrar</a>
+            <a class="link" href="{% url 'cadastro' %}">Cadastrar</a>
+        {% endif %}
+    </div>
+
     <h1>Mural de Recados</h1>
 
-    <a class="botao" href="{% url 'novo_recado' %}">Escrever novo recado</a>
+    {% if user.is_authenticated %}
+        <a class="botao" href="{% url 'novo_recado' %}">Escrever novo recado</a>
+    {% else %}
+        <p class="aviso">Faça login para publicar um recado.</p>
+    {% endif %}
 
     {% if recados %}
         {% for recado in recados %}
             <div class="recado">
-                <p class="nome">{{ recado.nome }}</p>
+                <p class="nome">{{ recado.autor.username }}</p>
                 <p>{{ recado.mensagem }}</p>
                 <p class="data">{{ recado.criado_em }}</p>
             </div>

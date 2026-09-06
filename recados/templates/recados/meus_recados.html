@@ -22,6 +22,10 @@
             <div class="recado">
                 <p>{{ recado.mensagem }}</p>
                 <p class="data">{{ recado.criado_em }}</p>
+                <div class="acoes">
+                    <a class="link-editar" href="{% url 'editar_recado' recado.id %}">Editar</a>
+                    <a class="link-excluir" href="{% url 'excluir_recado' recado.id %}">Excluir</a>
+                </div>
             </div>
         {% endfor %}
     {% else %}

@@ -1,7 +1,7 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 
 from .models import Recado
 
@@ -24,7 +24,7 @@ def novo_recado(request):
 
         if mensagem:
             Recado.objects.create(autor=request.user, mensagem=mensagem)
-            return redirect("mural")
+            return redirect("meus_recados")
 
         contexto = {
             "erro": "Escreva uma mensagem para publicar o recado.",
@@ -33,6 +33,42 @@ def novo_recado(request):
         return render(request, "recados/novo_recado.html", contexto)
 
     return render(request, "recados/novo_recado.html")
+
+
+@login_required
+def editar_recado(request, id):
+    # Só encontra o recado se ele existir E pertencer ao usuário logado.
+    # Se for de outra pessoa, retorna 404 antes de qualquer alteração.
+    recado = get_object_or_404(Recado, id=id, autor=request.user)
+
+    if request.method == "POST":
+        mensagem = request.POST.get("mensagem", "").strip()
+
+        if mensagem:
+            recado.mensagem = mensagem
+            recado.save()
+            return redirect("meus_recados")
+
+        contexto = {
+            "erro": "Escreva uma mensagem para salvar o recado.",
+            "recado": recado,
+            "mensagem": mensagem,
+        }
+        return render(request, "recados/editar_recado.html", contexto)
+
+    return render(request, "recados/editar_recado.html", {"recado": recado})
+
+
+@login_required
+def excluir_recado(request, id):
+    # Mesma proteção: só o dono chega no recado.
+    recado = get_object_or_404(Recado, id=id, autor=request.user)
+
+    if request.method == "POST":
+        recado.delete()
+        return redirect("meus_recados")
+
+    return render(request, "recados/excluir_recado.html", {"recado": recado})
 
 
 def cadastro(request):

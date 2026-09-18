@@ -11,10 +11,14 @@
         <p class="erro">{{ erro }}</p>
     {% endif %}
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="mensagem">Mensagem:</label>
         <textarea id="mensagem" name="mensagem" required>{{ mensagem|default:'' }}</textarea>
+
+        <label for="imagem">Imagem (opcional):</label>
+        <input type="file" id="imagem" name="imagem" accept="image/*">
+
         <button type="submit">Publicar recado</button>
     </form>
 {% endblock %}

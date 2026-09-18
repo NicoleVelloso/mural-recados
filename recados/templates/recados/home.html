@@ -26,6 +26,9 @@
         {% for recado in ultimos %}
             <div class="recado">
                 <p class="nome">{{ recado.autor.username }}</p>
+                {% if recado.imagem %}
+                    <img class="img-recado" src="{{ recado.imagem.url }}" alt="Imagem do recado">
+                {% endif %}
                 <p>{{ recado.mensagem|truncatechars:120 }}</p>
                 <p class="data">{{ recado.criado_em }}</p>
                 <a class="link-detalhes" href="{% url 'detalhes_recado' recado.id %}">Ver detalhes</a>

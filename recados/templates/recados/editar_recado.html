@@ -11,10 +11,19 @@
         <p class="erro">{{ erro }}</p>
     {% endif %}
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="mensagem">Mensagem:</label>
         <textarea id="mensagem" name="mensagem" required>{{ mensagem|default:recado.mensagem }}</textarea>
+
+        {% if recado.imagem %}
+            <p class="label-atual">Imagem atual:</p>
+            <img class="preview" src="{{ recado.imagem.url }}" alt="Imagem do recado">
+        {% endif %}
+
+        <label for="imagem">Trocar imagem (opcional):</label>
+        <input type="file" id="imagem" name="imagem" accept="image/*">
+
         <button type="submit">Salvar alterações</button>
     </form>
 {% endblock %}

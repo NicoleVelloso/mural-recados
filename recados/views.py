@@ -7,15 +7,20 @@ from .models import Recado
 
 
 def home(request):
+    # Pagina inicial: apresenta o mural e mostra apenas os ultimos recados.
+    # ORM com ordenacao (ja definida no Model) + limite de 5 registros.
     ultimos = Recado.objects.all()[:5]
     return render(request, "recados/home.html", {"ultimos": ultimos})
 
 
 def mural(request):
+    # Pesquisa via GET: o termo vem na URL como ?busca=algo
     busca = request.GET.get("busca", "").strip()
 
     recados = Recado.objects.all()
     if busca:
+        # Filtra pelo conteudo da mensagem OU pelo nome de quem publicou.
+        # __icontains = contem, ignorando maiusculas/minusculas.
         from django.db.models import Q
         recados = recados.filter(
             Q(mensagem__icontains=busca) | Q(autor__username__icontains=busca)
@@ -26,6 +31,8 @@ def mural(request):
 
 
 def detalhes_recado(request, id):
+    # URL dinamica /recados/<id>/ — busca o recado pelo ID no banco (ORM).
+    # Se o ID nao existir, get_object_or_404 responde 404 (sem erro interno).
     recado = get_object_or_404(Recado, id=id)
     return render(request, "recados/detalhes_recado.html", {"recado": recado})
 
@@ -40,9 +47,14 @@ def meus_recados(request):
 def novo_recado(request):
     if request.method == "POST":
         mensagem = request.POST.get("mensagem", "").strip()
+        imagem = request.FILES.get("imagem")  # arquivo enviado (opcional)
 
         if mensagem:
-            Recado.objects.create(autor=request.user, mensagem=mensagem)
+            Recado.objects.create(
+                autor=request.user,
+                mensagem=mensagem,
+                imagem=imagem,
+            )
             return redirect("meus_recados")
 
         contexto = {
@@ -63,6 +75,11 @@ def editar_recado(request, id):
 
         if mensagem:
             recado.mensagem = mensagem
+            # So troca a imagem se o usuario enviou uma nova;
+            # caso contrario, mantem a imagem existente.
+            nova_imagem = request.FILES.get("imagem")
+            if nova_imagem:
+                recado.imagem = nova_imagem
             recado.save()
             return redirect("meus_recados")
 

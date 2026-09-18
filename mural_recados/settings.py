@@ -27,6 +27,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Cloudinary: armazenamento de imagens na nuvem
+    "cloudinary",
+    "cloudinary_storage",
+
     "recados",
 ]
 
@@ -61,6 +65,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "mural_recados.wsgi.application"
 
+# Banco: usa PostgreSQL se DATABASE_URL existir, senão cai no SQLite local
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if DATABASE_URL:
@@ -94,7 +99,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
@@ -104,5 +109,19 @@ STORAGES = {
 LOGIN_URL = "entrar"
 LOGIN_REDIRECT_URL = "mural"
 LOGOUT_REDIRECT_URL = "mural"
+
+# ---------------------------------------------------------------------------
+# Cloudinary — armazenamento das imagens dos recados
+#
+# As credenciais vem de variaveis de ambiente (nunca no codigo).
+# Pegue esses valores no painel do Cloudinary (Dashboard).
+# ---------------------------------------------------------------------------
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
+
+MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

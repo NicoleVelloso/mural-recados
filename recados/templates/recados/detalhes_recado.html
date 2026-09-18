@@ -9,6 +9,9 @@
 
     <div class="recado">
         <p class="nome">Publicado por: {{ recado.autor.username }}</p>
+        {% if recado.imagem %}
+            <img class="img-recado" src="{{ recado.imagem.url }}" alt="Imagem do recado">
+        {% endif %}
         <p>{{ recado.mensagem }}</p>
         <p class="data">{{ recado.criado_em }}</p>
     </div>

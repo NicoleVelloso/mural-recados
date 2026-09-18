@@ -9,6 +9,11 @@ class Recado(models.Model):
         related_name="recados",
     )
     mensagem = models.TextField()
+    # Imagem opcional. Com o storage do Cloudinary configurado no settings,
+    # o arquivo enviado para este campo é gravado no Cloudinary
+    # automaticamente, e recado.imagem.url devolve a URL da nuvem.
+    # blank/null = True -> recados sem imagem continuam válidos.
+    imagem = models.ImageField(upload_to="recados/", blank=True, null=True)
     criado_em = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -9,7 +9,9 @@ class Recado(models.Model):
         related_name="recados",
     )
     mensagem = models.TextField()
-    imagem = models.ImageField(upload_to="recados/", blank=True, null=True)
+    imagem = models.ImageField(
+        upload_to="recados/", max_length=255, blank=True, null=True
+    )
     criado_em = models.DateTimeField(auto_now_add=True)
 
     class Meta:
